@@ -96,3 +96,80 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_|_|-|_|_
+
+## Criar o projeto :
+~ npm install -g @nestjs/cli
+
+## Instalar o nest/cli:
+~ npm install -g enestjs/cli
+
+## Auto gerar os arquivos de module & controller & service com nest/cli:
+~ nest generate module task
+~ nest generate controller task
+~ nest generate service task
+
+## Criptografia da senha bcrypt:
+~ npm install bcrypt
+~ npm install -D @types/bcrypt
+
+## Gerar hashId
+~ pnpm i uuid
+~ pnpm i -D @types/uuid
+
+## Auth com token vamos precisar de configurar as variáveis de ambiente.
+~ pnpm install @nestjs/config
+
+## Vamos tbm precisar configurar o serviço de geração e validação do token.
+~ pnpm install @nestjs/jwt
+
+## Para proteger as nossas requisições e obrigar o usuário a passar o token nas requisições.
+~ nest generate guard auth
+
+## Validação dos nossos DTO
+~ pnpm install class-validator class-transformer
+
+## Vamos usar o TypeORM para acesso ao banco de dados do nosso sistema.
+~ pnpm install typeorm @nestjs/typeorm
+
+## Vamos precisar tbm de instalar o driver do postgres
+~ pnpm install pg
+
+## vamos precisar tbm da lib do dotenv para as migrações do nosso ORM.
+~ pnpm install dotenv
+
+
+## Subir o banco de dados no docker:
+crie um arquivo 'docker-compose.yml' e dentro dele adicione:
+'version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: task-management-nest
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_DB: task-management-nest
+      POSTGRES_USER: nestapi
+      POSTGRES_PASSWORD: nestapi
+'
+
+### Agora é só rodar o comando para subir o container:
+~ docker compose up -d
+
+## Usando as migrations
+**dentro do package.json vamos criar alguns script para facilitar a geração das migrations:**
+"typeorm": "ts-node ./node_modules/typeorm/cli",
+"migration:create": "npm run typeorm -- migration:create ./src/db/migrations/$npm_config_name",
+"migration:run": "npm run typeorm migration:run -- -d ./src/db/typeOrm.migration-config.ts",
+"migration:revert": "npm run typeorm migration:revert -- -d ./src/db/typeOrm.migration-config.ts"
+
+## Tudo pronto para gerar execute o comando passando o name da tabela que você quer criar no db:
+~ npm run migration:create -name=task-table
+~ npm run migration:create -name=user-table
+
+## Depois de adicionar os scripts das migrations que foram criadas vamos executa-las para gerar as tabelas no banco de dados:
+~ npm run migration:run
+
